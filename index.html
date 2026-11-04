@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>El repte de les matrícules</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="contenidor">
+
+        <header>
+            <h1>El repte de les matrícules</h1>
+            <p>Resol l'operació i descobreix la paraula amagada!</p>
+        </header>
+
+        <section class="targeta">
+
+            <p id="estatDiccionari">
+                Carregant diccionari català...
+            </p>
+
+            <h2>Introdueix la matrícula</h2>
+
+            <input
+                type="text"
+                id="entradaNumeros"
+                placeholder="4 números (ex: 3127)"
+                maxlength="4"
+                inputmode="numeric"
+            >
+
+            <input
+                type="text"
+                id="entradaLletres"
+                placeholder="3 lletres (ex: EVI)"
+                maxlength="3"
+            >
+
+            <button id="botoGenerar" disabled>
+                Generar repte
+            </button>
+
+            <div class="matricula" id="matricula">
+                ---- - ---
+            </div>
+
+            <h2>1. Resol l'operació</h2>
+
+            <div class="operacio" id="operacio">
+                ---
+            </div>
+
+            <input
+                type="number"
+                id="respostaNumero"
+                placeholder="Escriu el resultat"
+            >
+
+            <h2>2. Troba la paraula</h2>
+
+            <p>
+                Escriu una paraula catalana que contingui
+                les tres lletres de la matrícula en aquest ordre.
+            </p>
+
+            <div class="lletres" id="lletres">
+                ---
+            </div>
+
+            <input
+                type="text"
+                id="respostaParaula"
+                placeholder="Escriu la paraula"
+                autocomplete="off"
+            >
+
+            <br>
+
+            <button id="botoComprovar" disabled>
+                Comprovar resposta
+            </button>
+
+            <p id="missatge" aria-live="polite"></p>
+
+            <div id="victoria" class="amagat">
+
+                <h2>🎉 Ho has trobat!</h2>
+
+                <p id="paraulaGuanyadora"></p>
+
+                <p id="horaVictoria"></p>
+
+                <p>Comparteix el joc amb els teus amics!</p>
+
+                <button id="botoNovaPartida">
+                    Nova partida
+                </button>
+
+            </div>
+
+        </section>
+
+        <footer>
+            <p>Un joc de paraules en català</p>
+        </footer>
+
+    </main>
+
+    <script src="diccionari.js"></script>
+    <script type="module" src="script.js"></script>
+
+</body>
+</html>
