@@ -1,16 +1,8 @@
-
-import nspell from "https://esm.sh/nspell@2.1.5";
-
-// ======================================
-// 1. VARIABLES
-// ======================================
-
 let numeroCorrecte = null;
 let lletresCorrectes = [];
-let corrector = null;
+let diccionariSet = null;
 let partidaGenerada = false;
 let partidaGuanyada = false;
-
 
 // ======================================
 // 2. NORMALITZAR PARAULES
@@ -238,7 +230,7 @@ function comprovarResposta() {
         return;
     }
 
-    if (corrector === null) {
+    if (diccionariSet === null) {
 
         document.getElementById("missatge").textContent =
             "El diccionari encara no està carregat.";
@@ -266,9 +258,9 @@ function comprovarResposta() {
     // Comprovar paraula amb Hunspell
 
     let paraulaValida =
-        paraulaOriginal.length > 0 &&
-        corrector.correct(paraulaOriginal) &&
-        conteLletres(paraulaNormalitzada, lletresCorrectes);
+    paraulaOriginal.length > 0 &&
+    diccionariSet.has(paraulaNormalitzada) &&
+    conteLletres(paraulaNormalitzada, lletresCorrectes);
 
     // Resultats
 
@@ -335,26 +327,25 @@ async function carregarDiccionari() {
 
         estat.textContent = "Carregant diccionari català...";
 
-        const [respostaAff, respostaDic] = await Promise.all([
+        const resposta = await fetch("./diccionari/ca_ES.dic");
 
-            fetch("./diccionari/ca_ES.aff"),
-            fetch("./diccionari/ca_ES.dic")
-
-        ]);
-
-        if (!respostaAff.ok || !respostaDic.ok) {
-
-            throw new Error("No s'han trobat els fitxers del diccionari.");
-
+        if (!resposta.ok) {
+            throw new Error("No s'ha trobat ca_ES.dic");
         }
 
-        const aff = await respostaAff.text();
-        const dic = await respostaDic.text();
+        const text = await resposta.text();
 
-        corrector = nspell(aff, dic);
+        diccionariSet = new Set(
+            text
+                .split("\n")
+                .slice(1)
+                .map(linia => linia.split("/")[0].trim())
+                .map(paraula => normalitzar(paraula))
+                .filter(Boolean)
+        );
 
         estat.textContent =
-            "✓ Diccionari català carregat correctament";
+            `✓ Diccionari carregat (${diccionariSet.size} paraules)`;
 
         estat.style.color = "#62d6a5";
 
@@ -364,7 +355,7 @@ async function carregarDiccionari() {
     } catch (error) {
 
         estat.textContent =
-            "Error carregant el diccionari. Revisa els fitxers.";
+            "Error carregant el diccionari.";
 
         estat.style.color = "#ff7777";
 
@@ -372,8 +363,6 @@ async function carregarDiccionari() {
 
     }
 }
-
-
 // ======================================
 // 9. CONNECTAR BOTONS
 // ======================================
